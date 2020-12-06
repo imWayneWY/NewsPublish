@@ -19,6 +19,7 @@
     <Folder Include="Areas\Admin\" />
     <Folder Include="Areas\Admin\Views\Home\" />
     <Folder Include="Areas\Admin\Views\Banner\" />
+    <Folder Include="Areas\Admin\Views\News\" />
   </ItemGroup>
   <ItemGroup>
     <Content Remove="Area\Admin\Views\index.cshtml" />

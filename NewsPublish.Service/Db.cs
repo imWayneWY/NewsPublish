@@ -26,6 +26,8 @@ namespace NewsPublish.Service
             sudo docker run -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=<YourStrong@Passw0rd>" \
    -p 1433:1433 --name sql1 \
    -d mcr.microsoft.com/mssql/server:2017-latest
+
+            https://zhuanlan.zhihu.com/p/112317708
              */
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
