@@ -15,7 +15,18 @@ namespace NewsPublish.Service
         protected override void OnConfiguring (DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
-            optionsBuilder.UseSqlServer("Data source=LAPTOP-IS0OAAEB;Initial Catalog=NewsPublish;User ID=weiyan;Password=weiyan", b => b.UseRowNumberForPaging());
+            // For my windows env
+            //optionsBuilder.UseSqlServer("Data source=LAPTOP-IS0OAAEB;Initial Catalog=NewsPublish;User ID=weiyan;Password=weiyan", b => b.UseRowNumberForPaging());
+            // For my mac env
+            optionsBuilder.UseSqlServer("Data source=127.0.0.1,1433;Initial Catalog=NewsPublish;User Id = SA;Password =<YourStrong@Passw0rd>", b => b.UseRowNumberForPaging());
+
+
+            /*
+             run this on mac:
+            sudo docker run -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=<YourStrong@Passw0rd>" \
+   -p 1433:1433 --name sql1 \
+   -d mcr.microsoft.com/mssql/server:2017-latest
+             */
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
