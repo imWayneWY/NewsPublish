@@ -220,7 +220,7 @@ namespace NewsPublish.Service
                     Id = news.Id,
                     Title = news.Title,
                     Image = news.Image,
-                    Contents = news.Contents,
+                    Contents = news.Contents.Length > 50 ? news.Contents.Substring(0,50)+"..." : news.Contents,
                     PublishDate = news.PublishDate.ToString("yyyy-MM-dd"),
                     Remark = news.Remark,
                     CommentCount = news.NewsComment.Count(),
