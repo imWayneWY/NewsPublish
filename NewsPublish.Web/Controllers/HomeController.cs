@@ -11,9 +11,23 @@ namespace NewsPublish.Web.Controllers
 {
     public class HomeController : Controller
     {
+        private NewsService _newsService;
+        private BannerService _bannerService;
+        public HomeController(NewsService newsService, BannerService bannerService)
+        {
+            this._newsService = newsService;
+            this._bannerService = bannerService;
+        }
+
         public IActionResult Index()
         {
-            return View();
+            ViewData["Title"] = "Home";
+            return View(_newsService.GetNewsClassifyList());
+        }
+
+        public JsonResult GetBanner()
+        {
+            return Json(_bannerService.GetBannerList());
         }
 
         public IActionResult About()

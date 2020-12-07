@@ -77,6 +77,7 @@
         var currentPageCount = 0;
         var classifyId = 0;
         var keyword = "";
+        var prevPage = 1;
         window.onload = (function(){
             // optional set
             pageNav.pre="&lt;Prev";
@@ -117,7 +118,10 @@
 
                     // p,当前页码,pn,总页面
                     pageNav.fn = function (p, pn) {
-                        $("#pageinfo").text("Cur:" + currentPageCount + " Total: " + totalPage);
+                        $("#pageinfo").text("Cur:" + p + " Total: " + totalPage);
+                        if(p!==prevPage){
+                            getNews(p, pageSize, classifyId, keyword);
+                        };
                         //alert("当前页:"+p+" 总页: "+pn);
                     };
 
@@ -129,6 +133,7 @@
                         var tr = '<tr class="text-c"><td>' + trData.id + '</td><td>' + trData.classifyName + '</td><td>' + trData.title + '</td><td>' + trData.contents + '</td><td>' + trData.publishDate + '</td><td>' + trData.remark + '</td><td class="f-14 user-manage"><a title="Delete" href="javascript:;" onClick="del(this,' + trData.id + ')" class="ml-5" style="text-decoration:none"><i class="icon-trash"></i></a></td></tr>'
                         $("#news_contents").append(tr);
                     }
+                    prevPage = pageIndex;
                 }
             })
         }
