@@ -14,24 +14,15 @@
                 <li data-target="#focusslide" data-slide-to="1"></li>
             </ol>
             <div class="carousel-inner" role="listbox">
-                <div class="item active">
-                    <a href="#" target="_blank">
-                        <img src="images//201610181557196870.jpg" class="img-responsive">
-                    </a>
-                </div>
-                <div class="item">
-                    <a href="#" target="_blank">
-                        <img src="images//201610241227558789.jpg" class="img-responsive">
-                    </a>
-                </div>
-            </div>
+
             <a class="left carousel-control" href="#focusslide" role="button" data-slide="prev" rel="nofollow"> <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span> <span class="sr-only">上一个</span> </a> <a class="right carousel-control" href="#focusslide" role="button" data-slide="next" rel="nofollow"> <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span> <span class="sr-only">下一个</span> </a>
         </div>
 
         <div class="title">
-            <h3>最新发布</h3>
+            <h3>Latest News</h3>
 
         </div>
+        <div id="home-news">
         <article class="excerpt excerpt-1" style="">
             <a class="focus" href="show.html" title="央企风电三大巨头联手打造东营海上风电装备制造基地" target="_blank"><img class="thumb" data-original="images/201610181739277776.jpg" src="images/201610181739277776.jpg" alt="央企风电三大巨头联手打造东营海上风电装备制造基地" style="display: inline;"></a>
             <header>
@@ -110,6 +101,7 @@
             </p>
             <p class="note">大众网东营6月27日讯（通讯员 张学荣）6月23日，山东（河口）风电产业园首批机组下线既二期项目开工仪式在河口经济开发区隆重举行，标志着河口经济开发区在实施新旧动能转换重大工程中又迈出了可喜的一步。山东（河口）风电产业园建设将对加快东营新旧动能转换，推动海洋经济深度融合发展具有现实意义和深远影响。</p>
         </article>
+        </div>
     </div>
 </div>
 <aside class="sidebar">
@@ -122,8 +114,8 @@
             <div class="tab-content">
                 <div role="tabpanel" class="tab-pane contact active" id="notice">
                     <h2>
-                        新闻总数:
-                        888篇
+                        Total News:
+                        <text id="total_news"></text>
                     </h2>
                     <h2>
                         网站运行:
@@ -221,3 +213,60 @@
         </div>
     </div>
 </aside>
+
+<script type="text/javascript">
+    $(function () {
+        getBanner();
+        getTotal();
+    })
+    function getBanner() {
+        $.ajax({
+            type: 'get',
+            url: '/Home/GetBanner',
+            success: function (data) {
+                if (data.code == 200) {
+                    $(".carousel-inner").empty();
+                    for (var i = 0; i < data.data.length; i++) {
+                        var m = data.data.[i];
+                        var banner;
+                        if (i === 0)
+                            banner = '<div class="item active"><a href = "' + m.url + '" target = "_blank" ><img src="' + m.image + '" class="img-responsive"></a></div >';
+                        else
+                            banner = '<div class="item"><a href = "' + m.url + '" target = "_blank" ><img src="' + m.image + '" class="img-responsive"></a></div >';
+
+                        $(".carousel-inner").append(banner);
+                    }
+                }
+            }
+        })
+    }
+    function getTotal() {
+        $.ajax({
+            type: 'get',
+            url: '/Home/GetTotalNews',
+            success: function (data) {
+                if (data.code == 200) {
+                    $("#total_news").text(data.data.toString());
+                }
+            }
+        })
+    }
+
+    function getHomeNews() {
+        $.ajax({
+            type: 'get',
+            url: '/Home/GetHomeNews',
+            success: function (data) {
+                if (data.code == 200) {
+                    $("#home-news").empty();
+                    for (var i = 0; i < data.data.length; i++) {
+                        var m = data.data.[i];
+                        var news = '<article class="excerpt excerpt-'+(i+1)+'" style=""><a class="focus" href = "/News/Detail?id='+m.id+'" title = "' + m.title + '" target = "_blank" ><img class="thumb" data-original="' + m.image + '" src="' + m.image + '" alt="newsImage" style="display: inline;"></a><header><h2><a href="/News/Detail?id='+m.id+'" title="' + m.title + '" target="_blank">' + m.title + '</a></h2></header><p class="meta"><time class="time"><i class="glyphicon glyphicon-time"></i>'+m.publishDate+'</time><a class="comment" title="review" target="_blank"><i class="glyphicon glyphicon-comment"></i>'+m.commentCount+'</a></p><p class="note">'+m.contents+'</p></article >';
+
+                        $("#home-news").append(news);
+                    }
+                }
+            }
+        })
+    }
+</script>
