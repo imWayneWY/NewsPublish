@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using NewsPublish.Model.Response;
 using NewsPublish.Service;
 using NewsPublish.Web.Models;
 using System;
@@ -41,6 +42,23 @@ namespace NewsPublish.Web.Controllers
         public JsonResult GetHomeNews()
         {
             return Json(_newsService.GetNewsList(c => true, 6));
+        }
+        [HttpGet]
+        public JsonResult GetNewCommentNewsList()
+        {
+            return Json(_newsService.GetNewsCommentNewsList(c=>true, 5));
+        }
+        [HttpGet]
+        public JsonResult SearchOneNews(string keyword)
+        {
+            if (string.IsNullOrEmpty(keyword))
+                return Json(new ResponseModel { code = 0, result = "keyword is needed" });
+            return Json(_newsService.GetSearchOneNews(c => c.Title.Contains(keyword)));
+        }
+        public ActionResult NoResult()
+        {
+            ViewData["Title"] = "No result found";
+            return View(_newsService.GetNewsClassifyList());
         }
     }
 }
