@@ -13,9 +13,11 @@ namespace NewsPublish.Web.Controllers
     public class NewsController : Controller
     {
         private NewsService _newsService;
-        public NewsController(NewsService newsService)
+        private CommentService _commentService;
+        public NewsController(NewsService newsService, CommentService commentService)
         {
             this._newsService = newsService;
+            this._commentService = commentService;
         }
         // GET: /<controller>/
         public IActionResult Classify(int id)
@@ -41,6 +43,31 @@ namespace NewsPublish.Web.Controllers
                 var newCommentNews = _newsService.GetNewsCommentNewsList(c => c.NewsClassifyId == id, 5);
                 ViewData["NewCommentNews"] = newCommentNews;
 
+            }
+            return View(_newsService.GetNewsClassifyList());
+        }
+
+        public IActionResult Detail(int id)
+        {
+            if (id<0)
+                Response.Redirect("/Home/Index");
+
+            var news = _newsService.GetOneNews(id);
+            ViewData["Title"] = "Detail Page";
+            ViewData["News"] = new ResponseModel();
+            ViewData["RecommendNews"] = new ResponseModel();
+            ViewData["Comments"] = new ResponseModel();
+
+            if (news.code == 0)
+            {
+                Response.Redirect("/Home/Index");
+            }
+            else
+            {
+                ViewData["Title"] = news.data.Title + " - Detail Page";
+                ViewData["News"] = news.data;
+                ViewData["RecommendNews"] = _newsService.GetRecommendNewsList(id);
+                ViewData["Comments"] = _commentService.GetCommentList(c => c.NewsId == id);
             }
             return View(_newsService.GetNewsClassifyList());
         }

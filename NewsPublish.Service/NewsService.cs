@@ -274,7 +274,7 @@ namespace NewsPublish.Service
             // key对应着newsId的value和key
             var newsIds = _db.NewsComment.OrderByDescending(c => c.AddTime).GroupBy(c => c.NewsId).Select(c => c.Key).Take(topCount);
 
-            var list = _db.News.Include("NewsClassify").Include("NewsComment").Where(c => newsIds.Contains(c.Id)).OrderByDescending(c =>
+            var list = _db.News.Include("NewsClassify").Include("NewsComment").Where(c => newsIds.Contains(c.Id)).Where(where).OrderByDescending(c =>
                 c.PublishDate);
 
             var response = new ResponseModel

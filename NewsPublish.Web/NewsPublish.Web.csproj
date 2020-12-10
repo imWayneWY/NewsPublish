@@ -21,7 +21,6 @@
     <Folder Include="Areas\Admin\Views\Banner\" />
     <Folder Include="Areas\Admin\Views\News\" />
     <Folder Include="Areas\Admin\Views\Comment\" />
-    <Folder Include="Views\News\" />
   </ItemGroup>
   <ItemGroup>
     <Content Remove="Area\Admin\Views\index.cshtml" />
