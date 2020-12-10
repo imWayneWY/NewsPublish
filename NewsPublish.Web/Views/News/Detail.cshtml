@@ -20,7 +20,7 @@
             <article class="article-content">
                 <p><img data-original="@response.data.Image" src="@response.data.Image" alt="" /></p>
                 <p>
-                    @response.data.Content
+                    @response.data.Contents
                 </p>
 
                 <div class="bdsharebuttonbox"><a href="#" class="bds_more" data-cmd="more"></a><a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间"></a><a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a><a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博"></a><a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a><a href="#" class="bds_tieba" data-cmd="tieba" title="分享到百度贴吧"></a><a href="#" class="bds_sqq" data-cmd="sqq" title="分享到QQ好友"></a></div>
@@ -49,17 +49,17 @@
             </ul>
         </div>
         <div class="title" id="comment">
-            <h3>评论</h3>
+            <h3>Review</h3>
         </div>
         <div id="respond">
             <form id="comment-form" name="comment-form" action="" method="POST">
                 <div class="comment">
                     <div class="comment-box">
-                        <textarea placeholder="您的评论或留言（必填）" name="comment-textarea" id="comment-textarea" cols="100%" rows="3" tabindex="3"></textarea>
+                        <textarea placeholder="Your review or comment" name="comment-textarea" id="comment-textarea" cols="100%" rows="3" tabindex="3"></textarea>
                         <div class="comment-ctrl">
-                            <div class="comment-prompt" style="display: none;"> <i class="fa fa-spin fa-circle-o-notch"></i> <span class="comment-prompt-text">评论正在提交中...请稍后</span> </div>
-                            <div class="comment-success" style="display: none;"> <i class="fa fa-check"></i> <span class="comment-prompt-text">评论提交成功...</span> </div>
-                            <button type="submit" name="comment-submit" id="comment-submit" tabindex="4">评论</button>
+                            <div class="comment-prompt" style="display: none;"> <i class="fa fa-spin fa-circle-o-notch"></i> <span class="comment-prompt-text">Your review is commiting... please wait a few secs.</span> </div>
+                            <div class="comment-success" style="display: none;"> <i class="fa fa-check"></i> <span class="comment-prompt-text">Review succ!</span> </div>
+                            <button type="button" onclick="comment()" name="comment-submit" id="comment-submit" tabindex="4">Review</button>
                         </div>
                     </div>
                 </div>
@@ -68,8 +68,16 @@
         </div>
         <div id="postcomments">
             <ol id="comment_list" class="commentlist">
-                <li class="comment-content"><span class="comment-f">#2</span><div class="comment-main"><p><a class="address" rel="nofollow" target="_blank">匿名</a><span class="time">(2016/10/28 11:41:03)</span><br>很好,第一时间了解时政详情.</p></div></li>
-                <li class="comment-content"><span class="comment-f">#1</span><div class="comment-main"><p><a class="address" rel="nofollow" target="_blank">匿名</a><span class="time">(2016/10/14 21:02:39)</span><br>做的不错,希望继续改进.</p></div></li>
+                @{
+                    var commentList = ViewData["Comments"] as ResponseModel;
+                    if (commentList.code == 200)
+                    {
+                        foreach (var comment in commentList.data)
+                        {
+                            <li class="comment-content"><span class="comment-f">@comment.Floor</span><div class="comment-main"><p><a class="address" rel="nofollow" target="_blank">匿名</a><span class="time">(@comment.AddTime)</span><br>@comment.Contents</p></div></li>
+                        }
+                    }
+                }
             </ol>
         </div>
     </div>
@@ -78,28 +86,23 @@
     <div class="fixed">
         <div class="widget widget-tabs">
             <ul class="nav nav-tabs" role="tablist">
-                <li role="presentation" class="active"><a href="#notice" aria-controls="notice" role="tab" data-toggle="tab" draggable="false">统计信息</a></li>
-                <li role="presentation"><a href="#contact" aria-controls="contact" role="tab" data-toggle="tab" draggable="false">联系站长</a></li>
+                <li role="presentation" class="active"><a href="#notice" aria-controls="notice" role="tab" data-toggle="tab" draggable="false">Info</a></li>
+                <li role="presentation"><a href="#contact" aria-controls="contact" role="tab" data-toggle="tab" draggable="false">Contact</a></li>
             </ul>
             <div class="tab-content">
                 <div role="tabpanel" class="tab-pane contact active" id="notice">
-                    <h2>
-                        新闻总数:
-                        888篇
+                    <h2>Total News:
+                        1
                     </h2>
                     <h2>
-                        网站运行:
-                        <span id="sitetime">5年以上 </span>
+                        Maintain:
+                        <span id="sitetime">5 Yrs+ </span>
                     </h2>
                 </div>
                 <div role="tabpanel" class="tab-pane contact" id="contact">
                     <h2>
-                        QQ:
-                        <a href="" target="_blank" rel="nofollow" data-toggle="tooltip" data-placement="bottom" title="" draggable="false" data-original-title="QQ:2835806641">2835806641</a>
-                    </h2>
-                    <h2>
                         Email:
-                        <a href="mailto:2835806641@qq.com" target="_blank" data-toggle="tooltip" rel="nofollow" data-placement="bottom" title="" draggable="false" data-original-title="Email:2835806641@qq.com">577211782@qq.com</a>
+                        <a href="mailto:im.weiyan@foxmail.com" target="_blank" data-toggle="tooltip" rel="nofollow" data-placement="bottom" title="" draggable="false" data-original-title="Email:im.weiyan@foxmail.com">im.weiyan@foxmail.com</a>
                     </h2>
                 </div>
             </div>
@@ -111,3 +114,28 @@
     </div>
 
 </aside>
+
+<script type="text/javascript">
+    function comment() {
+        var content = $("#comment-textarea").val();
+        if (content) {
+            $.ajax({
+                type: 'post',
+                url: '/News/AddComment',
+                data: {
+                    Contents: content,
+                    NewsId: @id,
+                },
+                success: function (res) {
+                    if (res.code == 200) {
+                        $("#comment-textarea").empty();
+                        var newComment = '<li class="comment-content"><span class="comment-f">' + res.data.floor + '</span><div class="comment-main"><p><a class="address" rel="nofollow" target="_blank">匿名</a><span class="time">(' + res.data.addTime + ')</span><br>' + res.data.contents + '</p></div></li>';
+                        $("#comment_list").prepend(newComment);
+                    } else {
+                        alert(res.result);
+                    }
+                }
+            })
+        }
+    }
+</script>

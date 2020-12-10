@@ -46,7 +46,7 @@ namespace NewsPublish.Service
                     data = new
                     {
                         contents = comment.Contents,
-                        floor = "#" + news.data.CommentCount + 1,
+                        floor = "#" + (news.data.CommentCount + 1),
                         addTime = DateTime.Now,
                     }
                 };
